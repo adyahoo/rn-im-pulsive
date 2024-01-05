@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "comment": "if you are using mac device, change the command from 'SET ENVFILE=.env && react-native run android/ios' to 'ENVFILE=.env react-native run android/ios'",
-    "android": "react-native run-android --variant=release",
+    "android": "react-native run-android",
     "android:staging": "ENVFILE=.env.staging react-native run-android",
     "android:debug": "ENVFILE=.env.debug react-native run-android",
     "ios": "react-native run-ios --simulator=\"iPhone 14\"",
