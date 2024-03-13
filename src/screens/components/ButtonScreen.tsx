@@ -2,221 +2,159 @@
  * Created by Widiana Putra on 27/05/2022
  * Copyright (c) 2022 - Made with love
  */
-import React from "react";
-import { ScrollView, View } from "react-native";
-import { Button, IconButton, Toast } from "../../../tmd";
-import TextButton from "../../../tmd/components/Button/TextButton";
-import Page from "../../../tmd/components/Page";
-import Stack from "../../../tmd/components/Layout/Stack";
-import Toolbar from "../../../tmd/components/Toolbar/Toolbar";
-import SocialButton from "../../../tmd/components/Button/SocialButton";
+import React from 'react';
+import {ScrollView, View} from 'react-native';
+import {Button, IconButton, Toast} from '../../../tmd';
+import TextButton from '../../../tmd/components/Button/TextButton';
+import Page from '../../../tmd/components/Page';
+import Stack from '../../../tmd/components/Layout/Stack';
+import Toolbar from '../../../tmd/components/Toolbar/Toolbar';
+import SocialButton from '../../../tmd/components/Button/SocialButton';
 
 export default function ButtonScreen() {
   return (
     <Page>
       <Toolbar
-        title={"ButtonScreen"}
-        description={"Deskripsikan "}
+        title={'ButtonScreen'}
+        description={'Deskripsikan '}
         actionButton={
           <IconButton
             onPress={() => {
-              console.log("IconButton Pressed");
+              console.log('IconButton Pressed');
             }}
-            variant={"tertiary"}
-            color={"black"}
-            icon={"search"}
+            variant={'tertiary'}
+            color={'black'}
+            icon={'search'}
           />
         }
       />
 
       <ScrollView>
-        <View style={{ padding: 16, flexDirection: "column" }}>
+        <View style={{padding: 16, flexDirection: 'column'}}>
           <Stack spacing={8}>
+            <IconButton shape={'rounded'} icon={'camera'} onPress={() => {}} />
             <IconButton
-              shape={"rounded"}
-              icon={"camera"}
-              onPress={() => {
-              }}
+              variant={'secondary'}
+              icon={'camera'}
+              onPress={() => {}}
             />
             <IconButton
-              variant={"secondary"}
-              icon={"camera"} onPress={() => {
-            }}
+              variant={'tertiary'}
+              icon={'camera'}
+              onPress={() => {}}
             />
             <IconButton
-              variant={"tertiary"}
-              icon={"camera"} onPress={() => {
-            }}
+              icon={'arrow-back'}
+              themeSize={'lg'}
+              onPress={() => {}}
             />
             <IconButton
-              icon={"arrow-back"}
-              themeSize={"lg"}
-              onPress={() => {
-              }}
+              themeSize={'md'}
+              icon={'arrow-back'}
+              onPress={() => {}}
             />
             <IconButton
-
-              themeSize={"md"}
-              icon={"arrow-back"} onPress={() => {
-            }}
+              themeSize={'sm'}
+              icon={'arrow-back'}
+              onPress={() => {}}
             />
-            <IconButton
-              themeSize={"sm"}
-              icon={"arrow-back"} onPress={() => {
-            }}
-            />
-            <TextButton
-              size={"md"}
-              onPress={() => {
-              }}
-            >
+            <TextButton size={'md'} onPress={() => {}}>
               TextButton
             </TextButton>
             <TextButton
               icon={{
-                icon: "camera",
+                icon: 'camera',
               }}
               underline
-              onPress={() => {
-              }}
-            >
+              onPress={() => {}}>
               TextButton
             </TextButton>
 
             <Button
-              shape={"rect"}
+              shape={'rect'}
               disabled
-              variant={"primary"}
-              onPress={() => {
-              }}>
+              variant={'primary'}
+              onPress={() => {}}>
               Primary
             </Button>
             <Button
               icon={{
-                icon: "camera",
+                icon: 'camera',
               }}
-              variant={"primary"}
-              onPress={() => {
-              }}>
+              variant={'primary'}
+              onPress={() => {}}>
               Primary
             </Button>
             <Button
               suffixIcon={{
-                icon: "camera",
+                icon: 'camera',
               }}
-              variant={"primary"}
-              onPress={() => {
-              }}>
+              variant={'primary'}
+              onPress={() => {}}>
               Primary
             </Button>
 
-            <Button
-              loading
-              variant={"primary"}
-              fullWidth
-              onPress={() => {
-              }}>
+            <Button loading variant={'primary'} fullWidth onPress={() => {}}>
               Primary
             </Button>
-            <Button
-              disabled
-              onPress={() => {
-              }}
-              variant={"secondary"}
-            >
+            <Button disabled onPress={() => {}} variant={'secondary'}>
               Secondary
             </Button>
 
-            <Button
-              loading
-              onPress={() => {
-              }}
-              variant={"secondary"}
-              fullWidth
-            >
+            <Button loading onPress={() => {}} variant={'secondary'} fullWidth>
               Secondary
             </Button>
 
             <Button
               icon={{
-                icon: "camera",
+                icon: 'camera',
               }}
-              onPress={() => {
-              }}
-              variant={"secondary"}
-            >
+              onPress={() => {}}
+              variant={'secondary'}>
               Secondary
             </Button>
-            <Button
-              onPress={() => {
-              }}
-              variant={"alternate"}
-            >
+            <Button onPress={() => {}} variant={'alternate'}>
               Alternate
             </Button>
 
             <Button
               icon={{
-                icon: "water",
+                icon: 'water',
               }}
-              onPress={() => {
-              }}
-              variant={"alternate"}>
+              onPress={() => {}}
+              variant={'alternate'}>
               Alternate
             </Button>
 
             <Button
               icon={{
-                icon: "camera",
+                icon: 'camera',
               }}
-              onPress={() => {
-              }}
-              variant={"tertiary"}
-            >
+              onPress={() => {}}
+              variant={'tertiary'}>
               Tertiary
             </Button>
-            <Button
-
-              onPress={() => {
-              }}
-              variant={"tertiary"}
-            >
+            <Button onPress={() => {}} variant={'tertiary'}>
               Tertiary
             </Button>
 
-            <Button onPress={() => {
-            }} size={"xs"}>
+            <Button onPress={() => {}} size={'xs'}>
               Button XS
             </Button>
-            <Button
-              onPress={() => {
-              }}
-              size={"sm"}>
+            <Button onPress={() => {}} size={'sm'}>
               Button Small
             </Button>
 
-            <Button
-              onPress={() => {
-              }}
-              size={"md"}>
+            <Button onPress={() => {}} size={'md'}>
               Button Medium
             </Button>
 
-            <Button
-              onPress={() => {
-              }}
-              size={"lg"}>
+            <Button onPress={() => {}} size={'lg'}>
               Button Large
             </Button>
 
-
             <View>
-              <SocialButton
-                fullWidth
-                social={"apple"}
-                onPress={() => {
-                }}
-              >
+              <SocialButton fullWidth social={'apple'} onPress={() => {}}>
                 Sign in With me
               </SocialButton>
             </View>
@@ -224,49 +162,33 @@ export default function ButtonScreen() {
             <View>
               <SocialButton
                 disabled
-                shape={"rect"}
-                socialVariant={"icon"}
+                shape={'rect'}
+                socialVariant={'icon'}
                 fullWidth
-                onPress={() => {
-
-                }}
+                onPress={() => {}}
               />
             </View>
 
             <View>
-              <SocialButton
-                social={"twitter"}
-                fullWidth
-                onPress={() => {
-                }}
-              >
+              <SocialButton social={'twitter'} fullWidth onPress={() => {}}>
                 Sign in With me
               </SocialButton>
             </View>
             <View>
               <SocialButton
-                social={"twitter"}
+                social={'twitter'}
                 fullWidth
                 disabled
-                onPress={() => {
-                }}
-              >
+                onPress={() => {}}>
                 Sign in With me
               </SocialButton>
             </View>
 
             <View>
-              <SocialButton
-
-                fullWidth
-                onPress={() => {
-                }}
-                disabled
-              >
+              <SocialButton fullWidth onPress={() => {}} disabled>
                 Sign in With me
               </SocialButton>
             </View>
-
           </Stack>
         </View>
       </ScrollView>

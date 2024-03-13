@@ -3,11 +3,11 @@
  * Copyright (c) 2022 - Made with love
  */
 
-import React, { useEffect, useState } from "react";
-import TextField from "../TextInput/TextField";
-import { usePermission } from "../../providers/PermissionProvider";
-import { LOCATION_PERMISSIONS } from "../../data/_permissionTypes";
-import { navigate } from "../../../src/navigations/RootNavigation";
+import React, {useEffect, useState} from 'react';
+import TextField from '../TextInput/TextField';
+import {usePermission} from '../../providers/PermissionProvider';
+import {LOCATION_PERMISSIONS} from '../../data/_permissionTypes';
+import {navigate} from '../../../src/navigations/RootNavigation';
 
 export interface SelectedMap {
   fullAddress?: string;
@@ -23,21 +23,16 @@ interface Props {
   initial?: SelectedMap;
 }
 
-export default function MapPicker({ onSelected, initial, ...rest }: React.ComponentProps<typeof TextField> & Props) {
+export default function MapPicker({
+  onSelected,
+  initial,
+  ...rest
+}: React.ComponentProps<typeof TextField> & Props) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [savedMap, setSavedMap] = useState<SelectedMap | null>(null);
-  const { requestPermissions } = usePermission();
+  const {requestPermissions} = usePermission();
   const handleOpen = () => {
-    requestPermissions([LOCATION_PERMISSIONS], () => {
-        navigate("MapPickerScreen", {
-          onSelected: (selected: SelectedMap) => {
-            setSavedMap(selected);
-            onSelected && onSelected(selected);
-          },
-          initial: initial,
-        });
-      },
-    );
+    requestPermissions([LOCATION_PERMISSIONS], () => {});
   };
 
   useEffect(() => {
@@ -49,17 +44,16 @@ export default function MapPicker({ onSelected, initial, ...rest }: React.Compon
     }
   }, []);
 
-
   return (
     <>
       <TextField
-        selection={{ start: 0 }}
-        pickerType={"map"}
+        selection={{start: 0}}
+        pickerType={'map'}
         editable={false}
         onOpenPicker={handleOpen}
         value={savedMap?.fullAddress}
         suffixIcon={{
-          icon: "map",
+          icon: 'map',
         }}
         {...rest}
       />
