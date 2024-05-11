@@ -52,6 +52,7 @@ import BottomNavTDSScreen from '../screens/components/BottomNavTDSScreen';
 import SliderTDSScreen from '../screens/components/SliderTDSScreen';
 import AccordionTDSScreen from '../screens/components/AccordionTDSScreen';
 import ChatGPTScreen from '../screens/components/ChatGPTScreen';
+import RegisterScreen from '../screens/RegisterScreen';
 
 const AppNavigation = () => {
   const Stack = createNativeStackNavigator<AppNavigationType>();
@@ -84,133 +85,18 @@ const AppNavigation = () => {
             {!isAuthenticated ? (
               <>
                 <Stack.Screen name={'LoginScreen'} component={LoginScreen} />
+                <Stack.Screen
+                  name={'RegisterScreen'}
+                  component={RegisterScreen}
+                />
               </>
             ) : (
               <>
                 <Stack.Screen name={'MainScreen'} component={MainScreen} />
-                <Stack.Screen
-                  name={'ImagePickerScreen'}
-                  component={ImagePickerScreen}
-                />
-                <Stack.Screen name={'ButtonScreen'} component={ButtonScreen} />
-                <Stack.Screen
-                  name={'TypographyScreen'}
-                  component={TypographyScreen}
-                />
-                <Stack.Screen
-                  name={'TextFieldScreen'}
-                  component={TextFieldScreen}
-                />
-                <Stack.Screen name={'PickerScreen'} component={PickerScreen} />
-                <Stack.Screen
-                  name={'BottomSheetScreen'}
-                  component={BottomSheetScreen}
-                />
-                <Stack.Screen name={'ModalScreen'} component={ModalScreen} />
-                <Stack.Screen name={'TagScreen'} component={TagScreen} />
-                <Stack.Screen name={'AlertScreen'} component={AlertScreen} />
-                <Stack.Screen
-                  name={'SelectorScreen'}
-                  component={SelectorScreen}
-                />
-                <Stack.Screen
-                  name={'LanguageScreen'}
-                  component={LanguageScreen}
-                />
-                <Stack.Screen name={'APIScreen'} component={APIScreen} />
-                <Stack.Screen
-                  name={'FetchDataScreen'}
-                  component={FetchDataScreen}
-                />
-                <Stack.Screen
-                  name={'PaginationScreen'}
-                  component={PaginationScreen}
-                />
-                <Stack.Screen name={'ChipScreen'} component={ChipScreen} />
-                <Stack.Screen name={'OTPScreen'} component={OTPScreen} />
-                <Stack.Screen name={'FormScreen'} component={FormScreen} />
-                <Stack.Screen name={'LayoutScreen'} component={LayoutScreen} />
-                <Stack.Screen name={'TabScreen'} component={TabScreen} />
-                <Stack.Screen name={'AvatarScreen'} component={AvatarScreen} />
-                <Stack.Screen name={'BadgeScreen'} component={BadgeScreen} />
-                <Stack.Screen
-                  name={'TooltipScreen'}
-                  component={TooltipScreen}
-                />
-                <Stack.Screen
-                  name={'TooltipStepperScreen'}
-                  component={TooltipStepperScreen}
-                />
-                <Stack.Screen
-                  name={'SkeletonScreen'}
-                  component={SkeletonScreen}
-                />
-                <Stack.Screen
-                  name={'DividerScreen'}
-                  component={DividerScreen}
-                />
-                <Stack.Screen
-                  name={'MapTrackingScreen'}
-                  component={MapTrackingScreen}
-                />
-                <Stack.Screen
-                  name={'ProgressBarScreen'}
-                  component={ProgressBarScreen}
-                />
-                <Stack.Screen
-                  name={'SignatureCanvasScreen'}
-                  component={SignatureCanvasScreen}
-                />
-                <Stack.Screen name={'ImageScreen'} component={ImageScreen} />
-                <Stack.Screen
-                  name={'StepperScreen'}
-                  component={StepperScreen}
-                />
-                <Stack.Screen
-                  name={'PrinterTDSScreen'}
-                  component={PrinterTDSScreen}
-                />
-                <Stack.Screen
-                  name={'ThemeTDSScreen'}
-                  component={ThemeTDSScreen}
-                />
-                <Stack.Screen
-                  name={'BottomNavTDSScreen'}
-                  component={BottomNavTDSScreen}
-                />
-                <Stack.Screen
-                  name={'SliderTDSScreen'}
-                  component={SliderTDSScreen}
-                />
-                <Stack.Screen
-                  name={'AccordionTDSScreen'}
-                  component={AccordionTDSScreen}
-                />
               </>
             )}
           </>
         )}
-
-        <Stack.Screen
-          name={'GalleryListScreen'}
-          component={GalleryListScreen}
-          options={{
-            headerShown: false,
-          }}
-        />
-
-        <Stack.Screen
-          name={'CarouselScreen'}
-          component={CarouselScreen}
-          options={{headerShown: false}}
-        />
-
-        <Stack.Screen
-          name={'StripeScreen'}
-          component={StripeScreen}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen name={'ChatGPTScreen'} component={ChatGPTScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

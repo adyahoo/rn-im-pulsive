@@ -4,9 +4,11 @@
  */
 
 export interface User {
-  id: number;
+  id: string;
   name: string;
   email: string;
+  profile: null | string;
+  thumbnail: null | string;
 }
 
 export interface LoginItem {
@@ -17,5 +19,3 @@ export interface LoginItem {
 export interface LoginResponse {
   data: LoginItem;
 }
-
-

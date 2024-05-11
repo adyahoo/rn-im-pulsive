@@ -1,33 +1,34 @@
-/**
- * Created by Widiana Putra on 30/06/2022
- * Copyright (c) 2022 - Made with love
- */
 import React from 'react';
+import {appTheme, Button, Page, RHFTextField, Stack} from '../../tmd';
 import {ScrollView, Text, View} from 'react-native';
+import {useAuth} from '../providers/AuthProvider';
 import * as yup from 'yup';
 import {FormProvider, useForm} from 'react-hook-form';
-import {appTheme, Button, RHFTextField} from '../../../tmd';
 import {yupResolver} from '@hookform/resolvers/yup';
-import {useAuth} from '../../providers/AuthProvider';
-import Page from '../../../tmd/components/Page';
-import Stack from '../../../tmd/components/Layout/Stack';
-import Typography from '../../../tmd/components/Typography/Typography';
-import {navigate} from '../../navigations/RootNavigation';
+import Typography from '../../tmd/components/Typography/Typography';
+import {navigate} from '../navigations/RootNavigation';
 
-export default function LoginScreen() {
-  const {login, isLoadingSubmit} = useAuth();
+const RegisterScreen = () => {
+  const {register, isLoadingSubmit} = useAuth();
   const {colors} = appTheme();
 
   const schema = yup
     .object({
       email: yup.string().email().required(),
+      name: yup.string().required(),
       password: yup.string().required().min(8),
+      confirm_password: yup
+        .string()
+        .required()
+        .oneOf([yup.ref('password'), null], 'Confirmation password not match'),
     })
     .required();
 
   const defaultValues = {
     email: '',
+    name: '',
     password: '',
+    confirm_password: '',
   };
 
   const method = useForm({
@@ -36,11 +37,11 @@ export default function LoginScreen() {
   });
 
   const onSubmit = async data => {
-    await login(data?.email, data?.password);
+    await register(data?.email, data?.name, data?.password);
   };
 
-  const navigateRegister = () => {
-    navigate('RegisterScreen');
+  const navigateLogin = () => {
+    navigate('LoginScreen');
   };
 
   return (
@@ -57,7 +58,16 @@ export default function LoginScreen() {
             style={{
               flex: 1,
             }}>
-            <Typography type={'title1'}>Login</Typography>
+            <Typography type={'title1'}>Register</Typography>
+
+            <View>
+              <RHFTextField
+                name={'name'}
+                label={'Name'}
+                placeholder={'Ex: mamank skkrtt'}
+              />
+            </View>
+
             <View>
               <RHFTextField
                 name={'email'}
@@ -75,30 +85,39 @@ export default function LoginScreen() {
               />
             </View>
 
+            <View>
+              <RHFTextField
+                name={'confirm_password'}
+                label={'Confirm Password'}
+                placeholder={'Enter your confirmation password'}
+                password
+              />
+            </View>
+
             <Typography>
-              Don’t have any account?
+              Already have an account?
               <Text
-                onPress={navigateRegister}
+                onPress={navigateLogin}
                 style={{color: colors.secondary.main}}>
                 {' '}
-                Register Here!
+                Login Here!
               </Text>
             </Typography>
 
             <Button
               loading={isLoadingSubmit}
-              onPress={method.handleSubmit(onSubmit, e => {
-                console.log(e);
-              })}
+              onPress={method.handleSubmit(onSubmit)}
               style={{
                 marginTop: 24,
               }}
               fullWidth>
-              Login
+              Register
             </Button>
           </Stack>
         </FormProvider>
       </ScrollView>
     </Page>
   );
-}
+};
+
+export default RegisterScreen;

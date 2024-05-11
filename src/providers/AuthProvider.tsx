@@ -2,50 +2,89 @@
  * Created by Widiana Putra on 30/06/2022
  * Copyright (c) 2022 - Made with love
  */
-import React, { createContext, useContext, useState } from "react";
-import { LoginResponse, User } from "../models/auth/Auth";
-import { useBottomSheet } from "../../tmd/providers/BottomSheetProvider";
-import { useDispatch, useSelector } from "react-redux";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import StorageKey from "../utils/StorageKey";
-import useBaseService from "../services/useBaseService";
+import React, {createContext, useContext, useState} from 'react';
+import {LoginResponse, User} from '../models/auth/Auth';
+import {useBottomSheet} from '../../tmd/providers/BottomSheetProvider';
+import {useDispatch, useSelector} from 'react-redux';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import StorageKey from '../utils/StorageKey';
+import useBaseService from '../services/useBaseService';
+import firestore from '@react-native-firebase/firestore';
+import auth from '@react-native-firebase/auth';
 
 export type AuthContextType = {
   login: (email: string, password: string) => void;
+  register: (email: string, name: string, password: string) => void;
   logout: () => void;
-  isLoadingLogin: boolean;
+  isLoadingSubmit: boolean;
   isLoadingLogout: boolean;
   isAuthenticated: boolean;
-  user?: User
-}
+  user?: User;
+};
 const AuthContext = createContext<AuthContextType | null>(null);
 
-const AuthProvider = ({ children }: any) => {
-  const isAuthenticated = useSelector(state => state.authReducer.isAuthenticated);
+const AuthProvider = ({children}: any) => {
+  const isAuthenticated = useSelector(
+    state => state.authReducer.isAuthenticated,
+  );
   const user = useSelector(state => state.authReducer.user);
 
   const dispatch = useDispatch();
-  const { patchAPI, postAPI } = useBaseService();
-  const { showErrorBS } = useBottomSheet();
-  const [isLoadingLogin, setIsLoadingLogin] = useState(false);
+  const {patchAPI, postAPI} = useBaseService();
+  const {showErrorBS} = useBottomSheet();
+  const [isLoadingSubmit, setIsLoadingSubmit] = useState(false);
   const [isLoadingLogout, setIsLoadingLogout] = useState(false);
 
   const login = async (email: string, password: string) => {
     try {
-      setIsLoadingLogin(true);
-      const res = await postAPI<LoginResponse>("auth/login", {
-        email, password,
-      });
-      await AsyncStorage.setItem(StorageKey.ACCESS_TOKEN, res.data.token);
+      setIsLoadingSubmit(true);
+      const res = await auth().signInWithEmailAndPassword(email, password);
+      const collection = await firestore().collection('user').get();
+      const user = collection.docs.find(
+        value => value.data().id == res.user.uid,
+      );
+
+      const data: User = user?.data() as User;
+
+      await AsyncStorage.setItem(StorageKey.ACCESS_TOKEN, res.user.uid);
+
       dispatch({
-        type: "LOGIN",
+        type: 'LOGIN',
         payload: {
-          user: res.data.user,
+          user: data,
         },
       });
-      setIsLoadingLogin(false);
+      setIsLoadingSubmit(false);
     } catch (e) {
-      setIsLoadingLogin(false);
+      setIsLoadingSubmit(false);
+      showErrorBS(e);
+    }
+  };
+
+  const register = async (email: string, name: string, password: string) => {
+    try {
+      setIsLoadingSubmit(true);
+      const res = await auth().createUserWithEmailAndPassword(email, password);
+
+      const data: User = {
+        id: res.user.uid,
+        email: email,
+        name: name,
+        profile: null,
+        thumbnail: null,
+      };
+      await firestore().collection('user').add(data);
+      await AsyncStorage.setItem(StorageKey.ACCESS_TOKEN, res.user.uid);
+
+      dispatch({
+        type: 'LOGIN',
+        payload: {
+          user: data,
+        },
+      });
+      setIsLoadingSubmit(false);
+    } catch (e) {
+      setIsLoadingSubmit(false);
       showErrorBS(e);
     }
   };
@@ -53,9 +92,9 @@ const AuthProvider = ({ children }: any) => {
   const logout = async () => {
     try {
       setIsLoadingLogout(true);
-      await AsyncStorage.setItem(StorageKey.ACCESS_TOKEN, "");
+      await AsyncStorage.setItem(StorageKey.ACCESS_TOKEN, '');
       dispatch({
-        type: "LOGOUT",
+        type: 'LOGOUT',
       });
       setIsLoadingLogout(false);
     } catch (e) {
@@ -68,8 +107,9 @@ const AuthProvider = ({ children }: any) => {
     <AuthContext.Provider
       value={{
         login,
+        register,
         logout,
-        isLoadingLogin,
+        isLoadingSubmit,
         isLoadingLogout,
         isAuthenticated,
         user,
@@ -81,7 +121,7 @@ const AuthProvider = ({ children }: any) => {
 
 export const useAuth = () => {
   const context = useContext(AuthContext);
-  if (!context) throw new Error("Auth context must be use inside AuthProvider");
+  if (!context) throw new Error('Auth context must be use inside AuthProvider');
   return context;
 };
 

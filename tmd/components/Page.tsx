@@ -33,7 +33,10 @@ export default function Page({
   const isFocused = useIsFocused();
   const isIos = Platform.OS === 'ios';
 
-  const CStatusBar = ({backgroundColor, ...props}: any) => (
+  const CStatusBar = ({
+    backgroundColor = colors.primary.surface,
+    ...props
+  }: any) => (
     <>
       {isIos ? (
         <View
@@ -70,7 +73,13 @@ export default function Page({
     <>
       <CStatusBar backgroundColor={statusBarBackgroundColor} />
       <SafeAreaView
-        style={[{flex: 1}, bgColor ? {backgroundColor: bgColor} : {}, styles]}>
+        style={[
+          {flex: 1},
+          bgColor
+            ? {backgroundColor: bgColor}
+            : {backgroundColor: colors.primary.surface},
+          styles,
+        ]}>
         {isIos ? (
           <KeyboardAvoidingView
             behavior={isIos ? 'padding' : 'height'}
