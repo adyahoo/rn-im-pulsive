@@ -1,20 +1,20 @@
-import * as React from "react";
-import { ReactNode } from "react";
-import { StyleProp, StyleSheet, TextStyle, View, ViewStyle } from "react-native";
-import color from "color";
+import * as React from 'react';
+import {ReactNode} from 'react';
+import {StyleProp, StyleSheet, TextStyle, View, ViewStyle} from 'react-native';
+import color from 'color';
 
-import CircularProgressBar from "../ProgressBar/CircularProgressBar";
-import Surface from "../Surface";
-import TouchableRipple from "../TouchableRipple/TouchableRipple";
-import { black, white } from "../../styles/defaultThemeColors";
-import { appTheme } from "../../core/theming";
-import Icon, { IconProps } from "../Icon";
-import Typography, { TypographyType } from "../Typography/Typography";
-import { ColorVariantType } from "../../types/types";
+import CircularProgressBar from '../ProgressBar/CircularProgressBar';
+import Surface from '../Surface';
+import TouchableRipple from '../TouchableRipple/TouchableRipple';
+import {black, white} from '../../styles/defaultThemeColors';
+import {appTheme} from '../../core/theming';
+import Icon, {IconProps} from '../Icon';
+import Typography, {TypographyType} from '../Typography/Typography';
+import {ColorVariantType} from '../../types/types';
 
-export type ButtonVariant = "primary" | "secondary" | "tertiary" | "alternate";
-export type ButtonShape = "rect" | "rounded"
-export type ButtonSize = "xs" | "sm" | "md" | "lg"
+export type ButtonVariant = 'primary' | 'secondary' | 'tertiary' | 'alternate';
+export type ButtonShape = 'rect' | 'rounded';
+export type ButtonSize = 'xs' | 'sm' | 'md' | 'lg';
 
 interface Props {
   /**
@@ -101,32 +101,32 @@ interface Props {
 }
 
 const Button = ({
-                  size,
-                  shape,
-                  fullWidth = false,
-                  disabled,
-                  compact,
-                  variant,
-                  dark,
-                  loading,
-                  icon,
-                  color: buttonColor,
-                  children,
-                  uppercase = false,
-                  accessibilityLabel,
-                  accessibilityHint,
-                  onPress,
-                  onLongPress,
-                  style,
-                  contentStyle,
-                  labelStyle,
-                  testID,
-                  accessible,
-                  suffixIcon,
-                  iconNode,
-                  colorVariant,
-                  ...rest
-                }: Props & React.ComponentProps<typeof Surface>) => {
+  size,
+  shape,
+  fullWidth = false,
+  disabled,
+  compact,
+  variant,
+  dark,
+  loading,
+  icon,
+  color: buttonColor,
+  children,
+  uppercase = false,
+  accessibilityLabel,
+  accessibilityHint,
+  onPress,
+  onLongPress,
+  style,
+  contentStyle,
+  labelStyle,
+  testID,
+  accessible,
+  suffixIcon,
+  iconNode,
+  colorVariant,
+  ...rest
+}: Props & React.ComponentProps<typeof Surface>) => {
   const theme = appTheme();
   const usedShape = shape ?? theme.button.shape;
   let marginSize = 8;
@@ -135,24 +135,23 @@ const Button = ({
   const usedSize = size ?? theme.button.size;
   let defIconSize = 18;
   switch (usedSize) {
-    case "xs":
+    case 'xs':
       marginSize = 4;
       defIconSize = 14;
       break;
-    case "sm":
+    case 'sm':
       marginSize = 8;
       defIconSize = 14;
       break;
-    case "md":
+    case 'md':
       marginSize = 10;
       break;
-    case "lg":
+    case 'lg':
       marginSize = 12;
       break;
   }
 
-
-  const { colors, roundness } = theme;
+  const {colors, roundness} = theme;
   const usedVariant = variant ?? theme.button.variant;
   let backgroundColor: string,
     borderColor: string,
@@ -165,15 +164,15 @@ const Button = ({
     borderColor = colors.neutral.neutral_40;
     borderWidth = 0;
 
-    if (usedVariant == "secondary") {
+    if (usedVariant == 'secondary') {
       backgroundColor = colors.neutral.neutral_10;
       textColor = colors.neutral.neutral_50;
       borderWidth = 1;
       borderColor = colors.neutral.neutral_50;
     }
-    if (usedVariant == "tertiary") {
-      borderColor = "transparent";
-      backgroundColor = "transparent";
+    if (usedVariant == 'tertiary') {
+      borderColor = 'transparent';
+      backgroundColor = 'transparent';
       textColor = color(theme.dark ? white : black)
         .alpha(0.5)
         .rgb()
@@ -181,89 +180,87 @@ const Button = ({
     }
   } else {
     switch (usedVariant) {
-      case "primary": {
+      case 'primary': {
         backgroundColor = buttonColor ?? colors[usedColorVariant]?.main;
-        borderColor = "transparent";
+        borderColor = 'transparent';
         borderWidth = 0;
         textColor = colors[usedColorVariant].content;
         break;
       }
-      case "secondary": {
+      case 'secondary': {
         borderColor = colors[usedColorVariant]?.main;
         borderWidth = 1;
         backgroundColor = colors.neutral.neutral_10;
         textColor = colors[usedColorVariant].main;
         break;
       }
-      case "tertiary": {
-        borderColor = "transparent";
+      case 'tertiary': {
+        borderColor = 'transparent';
         borderWidth = 0;
         textColor = colors[usedColorVariant].main;
         break;
       }
-      case "alternate": {
+      case 'alternate': {
         backgroundColor = buttonColor ?? colors[usedColorVariant]?.surface;
-        borderColor = "transparent";
+        borderColor = 'transparent';
         borderWidth = 0;
         textColor = colors[usedColorVariant].main;
       }
     }
   }
 
-  const rippleColor = color(colors[usedColorVariant].pressed).alpha(0.32).rgb().string();
+  const rippleColor = color(colors[usedColorVariant].pressed)
+    .alpha(0.32)
+    .rgb()
+    .string();
   const buttonStyle = {
     backgroundColor,
     borderColor,
     borderWidth,
-    borderRadius: usedShape == "rect"
-      ? roundness
-      : 24,
+    borderRadius: usedShape == 'rect' ? roundness : 24,
   };
   const touchableStyle = {
-      borderRadius: usedShape == "rect"
+    borderRadius:
+      usedShape == 'rect'
         ? style
           ? ((StyleSheet.flatten(style) || {}) as ViewStyle).borderRadius ||
-          roundness
+            roundness
           : roundness
         : 24,
-    }
-  ;
+  };
+  const {color: customLabelColor, fontSize: customLabelSize} =
+    StyleSheet.flatten(labelStyle) || {};
 
-  const { color: customLabelColor, fontSize: customLabelSize } =
-  StyleSheet.flatten(labelStyle) || {};
-
-  const textStyle = { color: textColor };
+  const textStyle = {color: textColor};
   const isIconButton = !children && icon;
   const iconStyle = isIconButton
-    ? { ...styles.iconButton, margin: marginSize }
+    ? {...styles.iconButton, margin: marginSize}
     : styles.icon;
 
   let buttonType: TypographyType;
   switch (usedSize) {
-    case "sm" : {
-      buttonType = "button3";
+    case 'sm': {
+      buttonType = 'button3';
       break;
     }
-    case "md": {
-      buttonType = "button2";
+    case 'md': {
+      buttonType = 'button2';
       break;
     }
-    case "lg": {
-      buttonType = "button1";
+    case 'lg': {
+      buttonType = 'button1';
       break;
     }
   }
   return (
-
-    <View style={
-      [
-        { display: "flex", flexDirection: fullWidth ? "column" : "row" },
+    <View
+      style={[
+        {display: 'flex', flexDirection: fullWidth ? 'column' : 'row'},
         style,
-        fullWidth ? {
-          flex: 1,
-        } : {},
-      ]
-    }>
+        // fullWidth ? {
+        //   flex: 1,
+        // } : {},
+      ]}>
       <Surface
         elevation={0}
         {...rest}
@@ -272,9 +269,8 @@ const Button = ({
           compact && styles.compact,
           buttonStyle,
           rest.buttonStyle,
-          fullWidth && { width: "100%" },
-        ]}
-      >
+          fullWidth && {width: '100%'},
+        ]}>
         <TouchableRipple
           borderless
           delayPressIn={0}
@@ -283,45 +279,39 @@ const Button = ({
           accessibilityLabel={accessibilityLabel}
           accessibilityHint={accessibilityHint}
           // @ts-expect-error We keep old a11y props for backwards compat with old RN versions
-          accessibilityTraits={(disabled || loading) ? ["button", "disabled"] : "button"}
+          accessibilityTraits={
+            disabled || loading ? ['button', 'disabled'] : 'button'
+          }
           accessibilityComponentType="button"
           accessibilityRole="button"
-          accessibilityState={{ disabled }}
+          accessibilityState={{disabled}}
           accessible={accessible}
           disabled={disabled || loading}
           rippleColor={rippleColor}
-          style={[
-            touchableStyle,
-          ]}
-          testID={testID}
-        >
+          style={[touchableStyle]}
+          testID={testID}>
           <View>
-
-            <View style={[
-              { marginVertical: marginSize },
-              styles.content,
-              contentStyle,
-            ]}>
-
-
+            <View
+              style={[
+                {marginVertical: marginSize},
+                styles.content,
+                contentStyle,
+              ]}>
               <>
                 {loading && (
-                  <View style={{ alignSelf: "center", marginRight: 8 }}>
+                  <View style={{alignSelf: 'center', marginRight: 8}}>
                     <CircularProgressBar
                       size={customLabelSize ?? 16}
                       color={
-                        typeof customLabelColor === "string"
+                        typeof customLabelColor === 'string'
                           ? customLabelColor
                           : textColor
                       }
                     />
                   </View>
-                )
-                }
+                )}
                 {icon ? (
-                  <View style={[
-                    iconStyle,
-                  ]}>
+                  <View style={[iconStyle]}>
                     <Icon
                       icon={icon.icon}
                       source={icon.source}
@@ -332,15 +322,9 @@ const Button = ({
                 ) : null}
 
                 {/*social media button*/}
-                {
-                  iconNode &&
-                  <View style={[iconStyle]}>
-                    {iconNode}
-                  </View>
-                }
+                {iconNode && <View style={[iconStyle]}>{iconNode}</View>}
 
-                {
-                  (!isIconButton) &&
+                {!isIconButton && (
                   <Typography
                     type={buttonType}
                     selectable={false}
@@ -351,40 +335,36 @@ const Button = ({
                       textStyle,
                       labelStyle,
                       {},
-                    ]}
-                  >
+                    ]}>
                     {children}
                   </Typography>
-                }
+                )}
 
-                {
-                  suffixIcon &&
-                  <View style={{ marginLeft: 8 }}>
+                {suffixIcon && (
+                  <View style={{marginLeft: 8}}>
                     <Icon
                       size={suffixIcon?.size ?? defIconSize}
                       color={suffixIcon?.color ?? textColor}
                       {...suffixIcon}
                     />
                   </View>
-                }
+                )}
               </>
-
-
             </View>
 
-            {rest?.underline &&
+            {rest?.underline && (
               <View
-                style={[{
-                  height: 1,
-                  marginBottom: 2,
-                  marginHorizontal: 2,
-                  backgroundColor: textColor ?? colors[usedColorVariant].main,
-                },
+                style={[
+                  {
+                    height: 1,
+                    marginBottom: 2,
+                    marginHorizontal: 2,
+                    backgroundColor: textColor ?? colors[usedColorVariant].main,
+                  },
                   rest.underlineStyle,
-                ]
-                }
+                ]}
               />
-            }
+            )}
           </View>
         </TouchableRipple>
       </Surface>
@@ -394,15 +374,15 @@ const Button = ({
 
 const styles = StyleSheet.create({
   button: {
-    borderStyle: "solid",
+    borderStyle: 'solid',
   },
   compact: {
-    minWidth: "auto",
+    minWidth: 'auto',
   },
   content: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
     marginHorizontal: 16,
   },
   icon: {
@@ -415,13 +395,13 @@ const styles = StyleSheet.create({
     margin: 8,
   },
   label: {
-    textAlign: "center",
+    textAlign: 'center',
   },
   compactLabel: {
     marginHorizontal: 8,
   },
   uppercaseLabel: {
-    textTransform: "uppercase",
+    textTransform: 'uppercase',
   },
 });
 

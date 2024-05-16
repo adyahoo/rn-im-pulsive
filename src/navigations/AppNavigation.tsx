@@ -53,6 +53,11 @@ import SliderTDSScreen from '../screens/components/SliderTDSScreen';
 import AccordionTDSScreen from '../screens/components/AccordionTDSScreen';
 import ChatGPTScreen from '../screens/components/ChatGPTScreen';
 import RegisterScreen from '../screens/RegisterScreen';
+import WelcomeScreen from '../screens/WelcomeScreen';
+import HomeScreen from '../screens/HomeScreen';
+import ProfileScreen from '../screens/ProfileScreen';
+import EditProfileScreen from '../screens/EditProfileScreen';
+import RecordExpenseScreen from '../screens/RecordExpenseScreen';
 
 const AppNavigation = () => {
   const Stack = createNativeStackNavigator<AppNavigationType>();
@@ -84,6 +89,10 @@ const AppNavigation = () => {
           <>
             {!isAuthenticated ? (
               <>
+                <Stack.Screen
+                  name={'WelcomeScreen'}
+                  component={WelcomeScreen}
+                />
                 <Stack.Screen name={'LoginScreen'} component={LoginScreen} />
                 <Stack.Screen
                   name={'RegisterScreen'}
@@ -92,7 +101,19 @@ const AppNavigation = () => {
               </>
             ) : (
               <>
-                <Stack.Screen name={'MainScreen'} component={MainScreen} />
+                <Stack.Screen name={'HomeScreen'} component={HomeScreen} />
+                <Stack.Screen
+                  name={'ProfileScreen'}
+                  component={ProfileScreen}
+                />
+                <Stack.Screen
+                  name={'EditProfileScreen'}
+                  component={EditProfileScreen}
+                />
+                <Stack.Screen
+                  name={'RecordExpenseScreen'}
+                  component={RecordExpenseScreen}
+                />
               </>
             )}
           </>

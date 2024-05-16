@@ -75,7 +75,10 @@
       "phone": "Telepon",
       "date": "Tanggal",
       "time": "Waktu",
-      "image": "Foto"
+      "image": "Foto",
+      "amount": "Jumlah",
+      "note": "Catatan",
+      "category": "Category"
     },
     "search": "Cari",
     "select_location": "Pilih Lokasi",
@@ -94,6 +97,23 @@
     "change_photo": "Ubah Foto",
     "latest_search": "Pencarian Terakhir",
     "clear_history": "Hapus Riwayat",
-    "see_more": "Lihat lainnya"
+    "see_more": "Lihat lainnya",
+    "welcome_title": "Selamat Datang di I’mPulsive",
+    "welcome_subtitle": "Ucapkan selamat tinggal pada sifat impulsive melalui aplikasi tracking ini.",
+    "login": "Masuk",
+    "register": "Daftar",
+    "dont_have_account": "Belum punya akun?",
+    "register_here": "Daftar Disini!",
+    "enter_password": "Masukan kata sandi",
+    "enter_conf_password": "Masukan kata sandi konfirmasi",
+    "already_have_account": "Sudah punya akun?",
+    "login_here": "Masuk Disini!",
+    "edit_profile": "Ubah Profile",
+    "change_language": "Ganti Bahasa",
+    "select_thumbnail": "Pilih Thumbnail",
+    "select_profile": "Pilih Foto Profil",
+    "record_expense": "Catat Pengeluaran",
+    "category_placeholder": "Ex: tagihan",
+    "expense": "Pengeluaran"
   }
 }

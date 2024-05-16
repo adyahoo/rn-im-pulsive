@@ -7,10 +7,12 @@ import {FormProvider, useForm} from 'react-hook-form';
 import {yupResolver} from '@hookform/resolvers/yup';
 import Typography from '../../tmd/components/Typography/Typography';
 import {navigate} from '../navigations/RootNavigation';
+import {useLocale} from '../providers/LocaleProvider';
 
 const RegisterScreen = () => {
   const {register, isLoadingSubmit} = useAuth();
   const {colors} = appTheme();
+  const {t} = useLocale();
 
   const schema = yup
     .object({
@@ -80,7 +82,7 @@ const RegisterScreen = () => {
               <RHFTextField
                 name={'password'}
                 label={'Password'}
-                placeholder={'Enter your password'}
+                placeholder={t('enter_password')}
                 password
               />
             </View>
@@ -89,18 +91,18 @@ const RegisterScreen = () => {
               <RHFTextField
                 name={'confirm_password'}
                 label={'Confirm Password'}
-                placeholder={'Enter your confirmation password'}
+                placeholder={t('enter_conf_password')}
                 password
               />
             </View>
 
             <Typography>
-              Already have an account?
+              {t('already_have_account')}
               <Text
                 onPress={navigateLogin}
                 style={{color: colors.secondary.main}}>
                 {' '}
-                Login Here!
+                {t('login_here')}
               </Text>
             </Typography>
 
@@ -110,8 +112,9 @@ const RegisterScreen = () => {
               style={{
                 marginTop: 24,
               }}
+              shape={'rect'}
               fullWidth>
-              Register
+              {t('register')}
             </Button>
           </Stack>
         </FormProvider>

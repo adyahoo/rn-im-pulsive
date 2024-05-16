@@ -3,12 +3,11 @@
  * Copyright (c) 2022 - Made with love
  */
 import React, {createContext, useContext, useState} from 'react';
-import {LoginResponse, User} from '../models/auth/Auth';
+import {User} from '../models/auth/Auth';
 import {useBottomSheet} from '../../tmd/providers/BottomSheetProvider';
 import {useDispatch, useSelector} from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import StorageKey from '../utils/StorageKey';
-import useBaseService from '../services/useBaseService';
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 
@@ -30,8 +29,8 @@ const AuthProvider = ({children}: any) => {
   const user = useSelector(state => state.authReducer.user);
 
   const dispatch = useDispatch();
-  const {patchAPI, postAPI} = useBaseService();
   const {showErrorBS} = useBottomSheet();
+
   const [isLoadingSubmit, setIsLoadingSubmit] = useState(false);
   const [isLoadingLogout, setIsLoadingLogout] = useState(false);
 
@@ -40,9 +39,7 @@ const AuthProvider = ({children}: any) => {
       setIsLoadingSubmit(true);
       const res = await auth().signInWithEmailAndPassword(email, password);
       const collection = await firestore().collection('user').get();
-      const user = collection.docs.find(
-        value => value.data().id == res.user.uid,
-      );
+      const user = collection.docs.find(value => value.id == res.user.uid);
 
       const data: User = user?.data() as User;
 
@@ -73,7 +70,7 @@ const AuthProvider = ({children}: any) => {
         profile: null,
         thumbnail: null,
       };
-      await firestore().collection('user').add(data);
+      await firestore().collection('user').doc(res.user.uid).set(data);
       await AsyncStorage.setItem(StorageKey.ACCESS_TOKEN, res.user.uid);
 
       dispatch({
@@ -92,10 +89,14 @@ const AuthProvider = ({children}: any) => {
   const logout = async () => {
     try {
       setIsLoadingLogout(true);
+
+      await auth().signOut();
+
       await AsyncStorage.setItem(StorageKey.ACCESS_TOKEN, '');
       dispatch({
         type: 'LOGOUT',
       });
+
       setIsLoadingLogout(false);
     } catch (e) {
       console.log(JSON.stringify(e, null, 2));

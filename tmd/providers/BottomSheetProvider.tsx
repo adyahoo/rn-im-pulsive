@@ -2,22 +2,33 @@
  * Created by Widiana Putra on 03/06/2022
  * Copyright (c) 2022 - Made with love
  */
-import React, { ComponentProps, createContext, useContext, useState } from "react";
-import ConfirmationBottomSheet from "../components/BottomSheet/ConfirmationBottomSheet";
-import AlertBottomSheet from "../components/BottomSheet/AlertBottomSheet";
-import IllustNoConnection from "../../src/assets/illusts/no_internet_connection.svg";
-import IllustServerError from "../../src/assets/illusts/server_error.svg";
-import IllustLocationPermission from "../../src/assets/illusts/permission_location.svg";
-import IllustCameraPermission from "../../src/assets/illusts/permission_camera.svg";
-import { Linking } from "react-native";
-import { useLocale } from "../../src/providers/LocaleProvider";
-import { LinearProgressBar } from "../index";
-import ProgressBottomSheet from "../components/BottomSheet/ProgressBottomSheet";
-import { dispatch, useAppSelector } from "../../src/redux/stores/store";
-import { isNetworkError } from "../../src/utils/network/networkHelper";
+import React, {
+  ComponentProps,
+  createContext,
+  useContext,
+  useState,
+} from 'react';
+import ConfirmationBottomSheet from '../components/BottomSheet/ConfirmationBottomSheet';
+import AlertBottomSheet from '../components/BottomSheet/AlertBottomSheet';
+import IllustNoConnection from '../../src/assets/illusts/no_internet_connection.svg';
+import IllustServerError from '../../src/assets/illusts/server_error.svg';
+import IllustLocationPermission from '../../src/assets/illusts/permission_location.svg';
+import IllustCameraPermission from '../../src/assets/illusts/permission_camera.svg';
+import {Linking} from 'react-native';
+import {useLocale} from '../../src/providers/LocaleProvider';
+import {LinearProgressBar} from '../index';
+import ProgressBottomSheet from '../components/BottomSheet/ProgressBottomSheet';
+import {dispatch, useAppSelector} from '../../src/redux/stores/store';
+import {isNetworkError} from '../../src/utils/network/networkHelper';
+import ExpenseListBottomSheet from '../../src/screens/components/bottom_sheets/ExpenseListBottomSheet';
 
 export type PermissionType =
-  "camera" | "storage" | "location" | "bluetooth" | "contact" | "another";
+  | 'camera'
+  | 'storage'
+  | 'location'
+  | 'bluetooth'
+  | 'contact'
+  | 'another';
 
 type ConfirmationBSContext = {
   imageNode?: React.ReactNode;
@@ -29,7 +40,7 @@ type ConfirmationBSContext = {
   buttonSecondaryAction?: () => void;
   buttonSecondary?: boolean;
   dismissible?: boolean;
-}
+};
 type BSContextType = {
   showConfirmationBS: (props: ConfirmationBSContext) => void;
   hideConfirmationBS: () => void;
@@ -37,52 +48,47 @@ type BSContextType = {
   hideAlertBS: () => void;
   showErrorBS: (error: any, props?: ConfirmationBSContext) => void;
   hideErrorBS: () => void;
-  showPermissionBS: (type: PermissionType, props?: ConfirmationBSContext) => void;
+  showPermissionBS: (
+    type: PermissionType,
+    props?: ConfirmationBSContext,
+  ) => void;
   hidePermissionBS: () => void;
   showLoadingBS: (props?: ProgressBSProps) => void;
   hideLoadingBS: () => void;
-}
+  showExpenseListBS: () => void;
+  hideExpenseListBS: () => void;
+};
 type ProgressBSProps = {
   title?: string;
   description?: string;
   dismissible?: boolean;
   linearProgressProps?: ComponentProps<typeof LinearProgressBar>;
-}
-
+};
 
 const initialState: BSContextType = {
-  showConfirmationBS: () => {
-  },
-  hideConfirmationBS: () => {
-  },
-  showAlertBS: () => {
-  },
-  hideAlertBS: () => {
-  },
-  showErrorBS: () => {
-  },
-  hideErrorBS: () => {
-  },
-  showPermissionBS: () => {
-  },
-  hidePermissionBS: () => {
-  },
-  showLoadingBS: () => {
-
-  },
-  hideLoadingBS: () => {
-
-  },
+  showConfirmationBS: () => {},
+  hideConfirmationBS: () => {},
+  showAlertBS: () => {},
+  hideAlertBS: () => {},
+  showErrorBS: () => {},
+  hideErrorBS: () => {},
+  showPermissionBS: () => {},
+  hidePermissionBS: () => {},
+  showLoadingBS: () => {},
+  hideLoadingBS: () => {},
+  showExpenseListBS: () => {},
+  hideExpenseListBS: () => {},
 };
 
 export const BSContext = createContext(initialState);
 export const useBottomSheet = () => useContext(BSContext);
-const BottomSheetProvider = ({ children }: any) => {
-  const { t } = useLocale();
-  const { isAuthenticated } = useAppSelector(state => state?.authReducer);
+const BottomSheetProvider = ({children}: any) => {
+  const {t} = useLocale();
+  const {isAuthenticated} = useAppSelector(state => state?.authReducer);
 
   const [isOpenConfirmation, setIsOpenConfirmation] = useState(false);
-  const [confirmationProps, setConfirmationProps] = useState<ConfirmationBSContext>({});
+  const [confirmationProps, setConfirmationProps] =
+    useState<ConfirmationBSContext>({});
   const [isOpenAlert, setIsOpenAlert] = useState(false);
   const [alertProps, setAlertProps] = useState<ConfirmationBSContext>({});
 
@@ -90,48 +96,56 @@ const BottomSheetProvider = ({ children }: any) => {
   const [errorProps, setErrorProps] = useState<ConfirmationBSContext>({});
 
   const [isOpenPermission, setIsOpenPermission] = useState(false);
-  const [permissionProps, setPermissionProps] = useState<ConfirmationBSContext>({});
+  const [permissionProps, setPermissionProps] = useState<ConfirmationBSContext>(
+    {},
+  );
 
   const [isOpenLoading, setIsOpenLoading] = useState(false);
   const [loadingProps, setLoadingProps] = useState<ProgressBSProps>({});
 
+  const [isOpenExpenseList, setIsOpenExpenseList] = useState(false);
 
   const showErrorBS = (error: any, props?: ConfirmationBSContext) => {
     let data: ConfirmationBSContext;
-    if ((error?.error?.code == 401) && isAuthenticated == true) {
+    if (error?.error?.code == 401 && isAuthenticated == true) {
       data = {
-        title: "Unauthorized",
-        description: "Please try to re-login or ask the administrator to give you access",
-        buttonPrimaryTitle: "Logout",
+        title: 'Unauthorized',
+        description:
+          'Please try to re-login or ask the administrator to give you access',
+        buttonPrimaryTitle: 'Logout',
         buttonPrimaryAction: () => {
           hideErrorBS();
           dispatch({
-            type: "LOGOUT",
+            type: 'LOGOUT',
           });
         },
         buttonSecondary: true,
-        buttonSecondaryTitle: "Cancel",
+        buttonSecondaryTitle: 'Cancel',
         dismissible: false,
         ...props,
       };
     } else if (error?.error?.errors) {
       data = {
-        title: props?.title ?? error?.error?.title ?? error?.error?.errors[0]?.title,
-        description: props?.description ?? error?.error?.description ?? error?.error?.errors[0]?.message,
+        title:
+          props?.title ?? error?.error?.title ?? error?.error?.errors[0]?.title,
+        description:
+          props?.description ??
+          error?.error?.description ??
+          error?.error?.errors[0]?.message,
         ...props,
       };
     } else if (isNetworkError(error)) {
       data = {
         imageNode: <IllustNoConnection />,
-        title: t("errors.no_connection_title"),
-        description: t("errors.no_connection_description"),
+        title: t('errors.no_connection_title'),
+        description: t('errors.no_connection_description'),
         ...props,
       };
     } else {
       data = {
         imageNode: <IllustServerError />,
-        title: t("errors.server_error_title"),
-        description: t("errors.server_error_description"),
+        title: t('errors.server_error_title'),
+        description: t('errors.server_error_description'),
         ...props,
       };
     }
@@ -147,57 +161,60 @@ const BottomSheetProvider = ({ children }: any) => {
     Linking.openSettings();
   };
 
-  const showPermissionBS = (type: PermissionType, props?: ConfirmationBSContext) => {
-    if (type != "another") {
+  const showPermissionBS = (
+    type: PermissionType,
+    props?: ConfirmationBSContext,
+  ) => {
+    if (type != 'another') {
       let data: ConfirmationBSContext;
       switch (type) {
-        case "camera": {
+        case 'camera': {
           data = {
             imageNode: <IllustCameraPermission />,
-            title: t("permissions.camera_title"),
-            description: t("permissions.camera_description"),
+            title: t('permissions.camera_title'),
+            description: t('permissions.camera_description'),
             buttonPrimaryAction: openSetting,
-            buttonPrimaryTitle: t("allow"),
+            buttonPrimaryTitle: t('allow'),
             buttonSecondary: true,
-            buttonSecondaryTitle: t("back"),
+            buttonSecondaryTitle: t('back'),
             ...props,
           };
           break;
         }
-        case "bluetooth": {
+        case 'bluetooth': {
           data = {
-            title: t("permissions.bluetooth_title"),
-            description: t("permissions.bluetooth_description"),
+            title: t('permissions.bluetooth_title'),
+            description: t('permissions.bluetooth_description'),
             buttonPrimaryAction: openSetting,
-            buttonPrimaryTitle: t("allow"),
+            buttonPrimaryTitle: t('allow'),
             buttonSecondary: true,
-            buttonSecondaryTitle: t("back"),
+            buttonSecondaryTitle: t('back'),
             ...props,
           };
           break;
         }
-        case "location": {
-          data = {
-            imageNode: <IllustLocationPermission />,
-            title: t("permissions.location_title"),
-            description: t("permissions.location_description"),
-            buttonPrimaryAction: openSetting,
-            buttonPrimaryTitle: t("allow"),
-            buttonSecondary: true,
-            buttonSecondaryTitle: t("back"),
-            ...props,
-          };
-          break;
-        }
-        case "storage": {
+        case 'location': {
           data = {
             imageNode: <IllustLocationPermission />,
-            title: t("permissions.storage_title"),
-            description: t("permissions.storage_description"),
+            title: t('permissions.location_title'),
+            description: t('permissions.location_description'),
             buttonPrimaryAction: openSetting,
-            buttonPrimaryTitle: t("allow"),
+            buttonPrimaryTitle: t('allow'),
             buttonSecondary: true,
-            buttonSecondaryTitle: t("back"),
+            buttonSecondaryTitle: t('back'),
+            ...props,
+          };
+          break;
+        }
+        case 'storage': {
+          data = {
+            imageNode: <IllustLocationPermission />,
+            title: t('permissions.storage_title'),
+            description: t('permissions.storage_description'),
+            buttonPrimaryAction: openSetting,
+            buttonPrimaryTitle: t('allow'),
+            buttonSecondary: true,
+            buttonSecondaryTitle: t('back'),
             ...props,
           };
           break;
@@ -241,47 +258,72 @@ const BottomSheetProvider = ({ children }: any) => {
     setIsOpenLoading(false);
   };
 
+  const showExpenseListBS = () => {
+    setIsOpenExpenseList(true);
+  };
+
+  const hideExpenseListBS = () => {
+    setIsOpenExpenseList(false);
+  };
+
   const renderComponent = () => {
-    return <>
-      <ConfirmationBottomSheet
-        open={isOpenConfirmation}
-        onClose={() => {
-          hideConfirmationBS();
-        }}
-        {...confirmationProps}
-      />
+    return (
+      <>
+        <ConfirmationBottomSheet
+          open={isOpenConfirmation}
+          onClose={() => {
+            hideConfirmationBS();
+          }}
+          {...confirmationProps}
+        />
 
-      <AlertBottomSheet
-        open={isOpenAlert}
-        onClose={hideAlertBS}
-        {...alertProps} />
+        <AlertBottomSheet
+          open={isOpenAlert}
+          onClose={hideAlertBS}
+          {...alertProps}
+        />
 
-      <AlertBottomSheet
-        open={isOpenError}
-        onClose={hideErrorBS}
-        {...errorProps} />
+        <AlertBottomSheet
+          open={isOpenError}
+          onClose={hideErrorBS}
+          {...errorProps}
+        />
 
-      <AlertBottomSheet
-        open={isOpenPermission}
-        onClose={hidePermissionBS}
-        {...permissionProps} />
+        <AlertBottomSheet
+          open={isOpenPermission}
+          onClose={hidePermissionBS}
+          {...permissionProps}
+        />
 
-      <ProgressBottomSheet open={isOpenLoading} onClose={hideLoadingBS} {...loadingProps} />
-    </>;
+        <ProgressBottomSheet
+          open={isOpenLoading}
+          onClose={hideLoadingBS}
+          {...loadingProps}
+        />
+
+        <ExpenseListBottomSheet
+          open={isOpenExpenseList}
+          onClose={hideExpenseListBS}
+        />
+      </>
+    );
   };
   return (
-    <BSContext.Provider value={{
-      showConfirmationBS,
-      hideConfirmationBS,
-      showAlertBS,
-      hideAlertBS,
-      showErrorBS,
-      hideErrorBS,
-      showPermissionBS,
-      hidePermissionBS,
-      showLoadingBS,
-      hideLoadingBS,
-    }}>
+    <BSContext.Provider
+      value={{
+        showConfirmationBS,
+        hideConfirmationBS,
+        showAlertBS,
+        hideAlertBS,
+        showErrorBS,
+        hideErrorBS,
+        showPermissionBS,
+        hidePermissionBS,
+        showLoadingBS,
+        hideLoadingBS,
+        showExpenseListBS,
+        hideExpenseListBS,
+      }}>
       {renderComponent()}
       {children}
     </BSContext.Provider>

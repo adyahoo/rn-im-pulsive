@@ -75,7 +75,10 @@
       "phone": "Phone",
       "date": "Date",
       "time": "Time",
-      "image": "Image"
+      "image": "Image",
+      "amount": "Amount",
+      "note": "Note",
+      "category": "Category"
     },
     "search": "Search",
     "select_location": "Select Location",
@@ -94,6 +97,23 @@
     "change_photo": "Change Photo",
     "latest_search": "Latest Search",
     "clear_history": "Clear History",
-    "see_more": "See more"
+    "see_more": "See more",
+    "welcome_title": "Welcome to I’mPulsive",
+    "welcome_subtitle": "Say goodbye to impulsive behavior through this tracking app",
+    "login": "Login",
+    "register": "Register",
+    "dont_have_account": "Don’t have any account?",
+    "register_here": "Register Here!",
+    "enter_password": "Enter your password",
+    "enter_conf_password": "Enter your confirmation password",
+    "already_have_account": "Already have an account?",
+    "login_here": "Login Here!",
+    "edit_profile": "Edit Profile",
+    "change_language": "Change Language",
+    "select_thumbnail": "Select Thumbnail",
+    "select_profile": "Select Profile Image",
+    "record_expense": "Record Expense",
+    "category_placeholder": "Ex: bills",
+    "expense": "Expense"
   }
 }

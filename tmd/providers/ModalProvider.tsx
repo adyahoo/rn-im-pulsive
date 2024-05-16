@@ -1,18 +1,23 @@
-import React, { ComponentProps, createContext, useContext, useState } from "react";
-import IllustNoConnection from "../../src/assets/illusts/no_internet_connection.svg";
-import IllustServerError from "../../src/assets/illusts/server_error.svg";
-import IllustLocationPermission from "../../src/assets/illusts/permission_location.svg";
-import IllustCameraPermission from "../../src/assets/illusts/permission_camera.svg";
-import { Linking } from "react-native";
-import { useLocale } from "../../src/providers/LocaleProvider";
-import { PermissionType } from "./BottomSheetProvider";
-import ConfirmationModal from "../components/Modal/ConfirmationModal";
-import AlertModal from "../components/Modal/AlertModal";
-import ProgressModal from "../components/Modal/ProgressModal";
-import { CircularProgressBar } from "../index";
-import { StackDirection } from "../components/Layout/Stack";
-import { dispatch, useAppSelector } from "../../src/redux/stores/store";
-import { isNetworkError } from "../../src/utils/network/networkHelper";
+import React, {
+  ComponentProps,
+  createContext,
+  useContext,
+  useState,
+} from 'react';
+import IllustNoConnection from '../../src/assets/illusts/no_internet_connection.svg';
+import IllustServerError from '../../src/assets/illusts/server_error.svg';
+import IllustLocationPermission from '../../src/assets/illusts/permission_location.svg';
+import IllustCameraPermission from '../../src/assets/illusts/permission_camera.svg';
+import {Linking} from 'react-native';
+import {useLocale} from '../../src/providers/LocaleProvider';
+import {PermissionType} from './BottomSheetProvider';
+import ConfirmationModal from '../components/Modal/ConfirmationModal';
+import AlertModal from '../components/Modal/AlertModal';
+import ProgressModal from '../components/Modal/ProgressModal';
+import {CircularProgressBar} from '../index';
+import {dispatch, useAppSelector} from '../../src/redux/stores/store';
+import {isNetworkError} from '../../src/utils/network/networkHelper';
+import ChangeLanguageModal from '../../src/screens/components/modals/ChangeLanguageModal';
 
 type ConfirmationModalContext = {
   imageNode?: React.ReactNode;
@@ -24,8 +29,8 @@ type ConfirmationModalContext = {
   buttonSecondaryAction?: () => void;
   buttonSecondary?: boolean;
   dismissible?: boolean;
-  buttonOrientation?: "horizontal" | "vertical";
-}
+  buttonOrientation?: 'horizontal' | 'vertical';
+};
 
 type ModalContextType = {
   showConfirmationModal: (props: ConfirmationModalContext) => void;
@@ -34,51 +39,47 @@ type ModalContextType = {
   hideAlertModal: () => void;
   showErrorModal: (error: any, props?: ConfirmationModalContext) => void;
   hideErrorModal: () => void;
-  showPermissionModal: (type: PermissionType, props?: ConfirmationModalContext) => void;
+  showPermissionModal: (
+    type: PermissionType,
+    props?: ConfirmationModalContext,
+  ) => void;
   hidePermissionModal: () => void;
   showLoadingModal: (props?: ProgressModalProps) => void;
   hideLoadingModal: () => void;
-}
+  showChangeLanguageModal: () => void;
+  hideChangeLanguageModal: () => void;
+};
 
 type ProgressModalProps = {
   title?: string;
   description?: string;
   dismissible?: boolean;
   circularProgressProps?: ComponentProps<typeof CircularProgressBar>;
-}
+};
 
 const initialState: ModalContextType = {
-  showConfirmationModal: () => {
-  },
-  hideConfirmationModal: () => {
-  },
-  showAlertModal: () => {
-  },
-  hideAlertModal: () => {
-  },
-  showErrorModal: () => {
-  },
-  hideErrorModal: () => {
-  },
-  showPermissionModal: () => {
-  },
-  hidePermissionModal: () => {
-  },
-  showLoadingModal: () => {
-
-  },
-  hideLoadingModal: () => {
-
-  },
+  showConfirmationModal: () => {},
+  hideConfirmationModal: () => {},
+  showAlertModal: () => {},
+  hideAlertModal: () => {},
+  showErrorModal: () => {},
+  hideErrorModal: () => {},
+  showPermissionModal: () => {},
+  hidePermissionModal: () => {},
+  showLoadingModal: () => {},
+  hideLoadingModal: () => {},
+  showChangeLanguageModal: () => {},
+  hideChangeLanguageModal: () => {},
 };
 
 export const ModalContext = createContext(initialState);
 export const useModal = () => useContext(ModalContext);
-const ModalProvider = ({ children }: any) => {
-  const { t } = useLocale();
-  const { isAuthenticated } = useAppSelector(state => state?.authReducer);
+const ModalProvider = ({children}: any) => {
+  const {t} = useLocale();
+  const {isAuthenticated} = useAppSelector(state => state?.authReducer);
   const [isOpenConfirmation, setIsOpenConfirmation] = useState(false);
-  const [confirmationProps, setConfirmationProps] = useState<ConfirmationModalContext>({});
+  const [confirmationProps, setConfirmationProps] =
+    useState<ConfirmationModalContext>({});
   const [isOpenAlert, setIsOpenAlert] = useState(false);
   const [alertProps, setAlertProps] = useState<ConfirmationModalContext>({});
 
@@ -86,48 +87,55 @@ const ModalProvider = ({ children }: any) => {
   const [errorProps, setErrorProps] = useState<ConfirmationModalContext>({});
 
   const [isOpenPermission, setIsOpenPermission] = useState(false);
-  const [permissionProps, setPermissionProps] = useState<ConfirmationModalContext>({});
+  const [permissionProps, setPermissionProps] =
+    useState<ConfirmationModalContext>({});
 
   const [isOpenProgress, setIsOpenProgress] = useState(false);
   const [progressProps, setProgressProps] = useState<ProgressModalProps>({});
 
+  const [isOpenChangeLanguage, setIsOpenChangeLanguage] = useState(false);
 
   const showErrorModal = (error: any, props?: ConfirmationModalContext) => {
     let data: ConfirmationModalContext;
-    if ((error?.error?.code == 401) && isAuthenticated == true) {
+    if (error?.error?.code == 401 && isAuthenticated == true) {
       data = {
-        title: "Unauthorized",
-        description: "Please try to re-login or ask the administrator to give you access",
-        buttonPrimaryTitle: "Logout",
+        title: 'Unauthorized',
+        description:
+          'Please try to re-login or ask the administrator to give you access',
+        buttonPrimaryTitle: 'Logout',
         buttonPrimaryAction: () => {
           hideErrorModal();
           dispatch({
-            type: "LOGOUT",
+            type: 'LOGOUT',
           });
         },
         buttonSecondary: true,
-        buttonSecondaryTitle: "Cancel",
+        buttonSecondaryTitle: 'Cancel',
         dismissible: false,
         ...props,
       };
     } else if (error?.error?.errors) {
       data = {
-        title: props?.title ?? error?.error?.title ?? error?.error?.errors[0]?.title,
-        description: props?.description ?? error?.error?.description ?? error?.error?.errors[0]?.message,
+        title:
+          props?.title ?? error?.error?.title ?? error?.error?.errors[0]?.title,
+        description:
+          props?.description ??
+          error?.error?.description ??
+          error?.error?.errors[0]?.message,
         ...props,
       };
     } else if (isNetworkError(error)) {
       data = {
         imageNode: <IllustNoConnection />,
-        title: t("errors.no_connection_title"),
-        description: t("errors.no_connection_description"),
+        title: t('errors.no_connection_title'),
+        description: t('errors.no_connection_description'),
         ...props,
       };
     } else {
       data = {
         imageNode: <IllustServerError />,
-        title: t("errors.server_error_title"),
-        description: t("errors.server_error_description"),
+        title: t('errors.server_error_title'),
+        description: t('errors.server_error_description'),
         ...props,
       };
     }
@@ -143,57 +151,60 @@ const ModalProvider = ({ children }: any) => {
     Linking.openSettings();
   };
 
-  const showPermissionModal = (type: PermissionType, props?: ConfirmationModalContext) => {
-    if (type != "another") {
+  const showPermissionModal = (
+    type: PermissionType,
+    props?: ConfirmationModalContext,
+  ) => {
+    if (type != 'another') {
       let data: ConfirmationModalContext;
       switch (type) {
-        case "camera": {
+        case 'camera': {
           data = {
             imageNode: <IllustCameraPermission />,
-            title: t("permissions.camera_title"),
-            description: t("permissions.camera_description"),
+            title: t('permissions.camera_title'),
+            description: t('permissions.camera_description'),
             buttonPrimaryAction: openSetting,
-            buttonPrimaryTitle: t("allow"),
+            buttonPrimaryTitle: t('allow'),
             buttonSecondary: true,
-            buttonSecondaryTitle: t("back"),
+            buttonSecondaryTitle: t('back'),
             ...props,
           };
           break;
         }
-        case "bluetooth": {
+        case 'bluetooth': {
           data = {
-            title: t("permissions.bluetooth_title"),
-            description: t("permissions.bluetooth_description"),
+            title: t('permissions.bluetooth_title'),
+            description: t('permissions.bluetooth_description'),
             buttonPrimaryAction: openSetting,
-            buttonPrimaryTitle: t("allow"),
+            buttonPrimaryTitle: t('allow'),
             buttonSecondary: true,
-            buttonSecondaryTitle: t("back"),
+            buttonSecondaryTitle: t('back'),
             ...props,
           };
           break;
         }
-        case "location": {
-          data = {
-            imageNode: <IllustLocationPermission />,
-            title: t("permissions.location_title"),
-            description: t("permissions.location_description"),
-            buttonPrimaryAction: openSetting,
-            buttonPrimaryTitle: t("allow"),
-            buttonSecondary: true,
-            buttonSecondaryTitle: t("back"),
-            ...props,
-          };
-          break;
-        }
-        case "storage": {
+        case 'location': {
           data = {
             imageNode: <IllustLocationPermission />,
-            title: t("permissions.storage_title"),
-            description: t("permissions.storage_description"),
+            title: t('permissions.location_title'),
+            description: t('permissions.location_description'),
             buttonPrimaryAction: openSetting,
-            buttonPrimaryTitle: t("allow"),
+            buttonPrimaryTitle: t('allow'),
             buttonSecondary: true,
-            buttonSecondaryTitle: t("back"),
+            buttonSecondaryTitle: t('back'),
+            ...props,
+          };
+          break;
+        }
+        case 'storage': {
+          data = {
+            imageNode: <IllustLocationPermission />,
+            title: t('permissions.storage_title'),
+            description: t('permissions.storage_description'),
+            buttonPrimaryAction: openSetting,
+            buttonPrimaryTitle: t('allow'),
+            buttonSecondary: true,
+            buttonSecondaryTitle: t('back'),
             ...props,
           };
           break;
@@ -238,46 +249,72 @@ const ModalProvider = ({ children }: any) => {
     setIsOpenProgress(false);
   };
 
+  const showChangeLanguageModal = () => {
+    setIsOpenChangeLanguage(true);
+  };
+
+  const hideChangeLanguageModal = () => {
+    setIsOpenChangeLanguage(false);
+  };
+
   const renderComponent = () => {
-    return <>
-      <AlertModal
-        open={isOpenAlert}
-        onClose={hideAlertModal}
-        {...alertProps} />
+    return (
+      <>
+        <AlertModal
+          open={isOpenAlert}
+          onClose={hideAlertModal}
+          {...alertProps}
+        />
 
-      <ConfirmationModal
-        {...confirmationProps}
-        open={isOpenConfirmation}
-        onClose={() => {
-          hideConfirmationModal();
-        }} />
+        <ConfirmationModal
+          {...confirmationProps}
+          open={isOpenConfirmation}
+          onClose={() => {
+            hideConfirmationModal();
+          }}
+        />
 
-      <AlertModal
-        open={isOpenError}
-        onClose={hideErrorModal}
-        {...errorProps} />
+        <AlertModal
+          open={isOpenError}
+          onClose={hideErrorModal}
+          {...errorProps}
+        />
 
-      <AlertModal
-        open={isOpenPermission}
-        onClose={hidePermissionModal}
-        {...permissionProps} />
+        <AlertModal
+          open={isOpenPermission}
+          onClose={hidePermissionModal}
+          {...permissionProps}
+        />
 
-      <ProgressModal open={isOpenProgress} onClose={hideLoadingModal} {...progressProps} />
-    </>;
+        <ProgressModal
+          open={isOpenProgress}
+          onClose={hideLoadingModal}
+          {...progressProps}
+        />
+
+        <ChangeLanguageModal
+          open={isOpenChangeLanguage}
+          onClose={hideChangeLanguageModal}
+        />
+      </>
+    );
   };
   return (
-    <ModalContext.Provider value={{
-      showConfirmationModal,
-      hideConfirmationModal,
-      showAlertModal,
-      hideAlertModal,
-      showErrorModal,
-      hideErrorModal,
-      showPermissionModal,
-      hidePermissionModal,
-      showLoadingModal,
-      hideLoadingModal,
-    }}>
+    <ModalContext.Provider
+      value={{
+        showConfirmationModal,
+        hideConfirmationModal,
+        showAlertModal,
+        hideAlertModal,
+        showErrorModal,
+        hideErrorModal,
+        showPermissionModal,
+        hidePermissionModal,
+        showLoadingModal,
+        hideLoadingModal,
+        showChangeLanguageModal,
+        hideChangeLanguageModal,
+      }}>
       {renderComponent()}
       {children}
     </ModalContext.Provider>

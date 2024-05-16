@@ -13,10 +13,12 @@ import Page from '../../../tmd/components/Page';
 import Stack from '../../../tmd/components/Layout/Stack';
 import Typography from '../../../tmd/components/Typography/Typography';
 import {navigate} from '../../navigations/RootNavigation';
+import {useTranslation} from 'react-i18next';
 
 export default function LoginScreen() {
   const {login, isLoadingSubmit} = useAuth();
   const {colors} = appTheme();
+  const {t} = useTranslation();
 
   const schema = yup
     .object({
@@ -70,18 +72,18 @@ export default function LoginScreen() {
               <RHFTextField
                 name={'password'}
                 label={'Password'}
-                placeholder={'Enter your password'}
+                placeholder={t('enter_password')}
                 password
               />
             </View>
 
             <Typography>
-              Don’t have any account?
+              {t('dont_have_account')}
               <Text
                 onPress={navigateRegister}
                 style={{color: colors.secondary.main}}>
                 {' '}
-                Register Here!
+                {t('register_here')}
               </Text>
             </Typography>
 
@@ -93,8 +95,9 @@ export default function LoginScreen() {
               style={{
                 marginTop: 24,
               }}
+              shape={'rect'}
               fullWidth>
-              Login
+              {t('login')}
             </Button>
           </Stack>
         </FormProvider>

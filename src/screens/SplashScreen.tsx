@@ -1,10 +1,11 @@
 import React, {useEffect} from 'react';
-import {Page, Stack, Toast} from '../../tmd';
+import {appTheme, Page, Stack, Toast} from '../../tmd';
 import Typography from '../../tmd/components/Typography/Typography';
 import {useDispatch} from 'react-redux';
 
 export default function SplashScreen() {
   const dispatch = useDispatch();
+  const {colors} = appTheme();
 
   useEffect(() => {
     handleRouting();
@@ -21,7 +22,7 @@ export default function SplashScreen() {
   };
 
   return (
-    <Page>
+    <Page statusBarColor={colors.primary.surface}>
       <Stack style={{flex: 1}} items={'center'} content={'center'}>
         <Typography style={{textAlign: 'center'}} type={'label1'}>
           RN Starter Kit
