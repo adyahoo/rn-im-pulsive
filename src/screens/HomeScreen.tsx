@@ -24,7 +24,6 @@ const HomeScreen = () => {
 
   const getSummary = async () => {
     const res = await getGraphicData();
-    console.log(res);
 
     setSeries(res.total);
     setSliceColor(res.color);
